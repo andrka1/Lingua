@@ -1,17 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { categories, words } from "../data/words";
-import { getProgress, getStreak, getWordOfDay, getExcludedIds } from "../data/storage";
+import { getProgress, getWordOfDay, getExcludedIds } from "../data/storage";
 import CategoryCard from "../components/CategoryCard";
-import ProgressRing from "../components/ProgressRing";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const progress = getProgress();
-  const streak = getStreak();
-  const totalWords = words.length;
-  const learnedPercent = totalWords
-    ? Math.round((progress.learnedWords.length / totalWords) * 100)
-    : 0;
   const excluded = new Set(getExcludedIds());
   const newWordsCount = words.filter(
     (w) => !progress.learnedWords.includes(w.id) && !excluded.has(w.id)
@@ -42,33 +36,6 @@ export default function HomePage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </button>
-        </div>
-      </div>
-
-      {/* Stats bar */}
-      <div className="flex items-center gap-4 mb-6 p-4 rounded-2xl bg-slate-800/60 border border-slate-700/40">
-        <ProgressRing progress={learnedPercent} size={72} strokeWidth={6}>
-          <span className="text-sm font-bold text-brand-400">{learnedPercent}%</span>
-        </ProgressRing>
-        <div className="flex-1">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-slate-400">Выучено</span>
-            <span className="text-sm font-semibold text-white">
-              {progress.learnedWords.length}/{totalWords}
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <span className="text-lg">🔥</span>
-              <span className="text-sm font-bold text-white">{streak}</span>
-              <span className="text-xs text-slate-500">дн.</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-lg">🆕</span>
-              <span className="text-sm font-bold text-white">{newWordsCount}</span>
-              <span className="text-xs text-slate-500">новых</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -109,8 +76,8 @@ export default function HomePage() {
         </button>
       </div>
 
-      {/* Spelling + Matching */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      {/* Spelling */}
+      <div className="mb-6">
         <button
           onClick={() => navigate("/spelling")}
           className="p-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-left transition-all active:scale-[0.97] shadow-soft"
@@ -118,14 +85,6 @@ export default function HomePage() {
           <div className="text-2xl mb-2">⌨️</div>
           <h3 className="font-semibold text-sm">Письмо</h3>
           <p className="text-xs text-white/80 mt-0.5">Впиши по буквам</p>
-        </button>
-        <button
-          onClick={() => navigate("/match")}
-          className="p-5 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 text-white text-left transition-all active:scale-[0.97] shadow-soft"
-        >
-          <div className="text-2xl mb-2">🧩</div>
-          <h3 className="font-semibold text-sm">Пары</h3>
-          <p className="text-xs text-white/80 mt-0.5">Соедини слово и перевод</p>
         </button>
       </div>
 
@@ -148,12 +107,10 @@ export default function HomePage() {
         <div className="flex flex-col gap-3">
           {categories.map((cat) => {
             const catWords = words.filter((w) => w.category === cat.id);
-            const learned = catWords.filter((w) => progress.learnedWords.includes(w.id)).length;
             return (
               <CategoryCard
                 key={cat.id}
                 category={cat}
-                learnedCount={learned}
                 totalCount={catWords.length}
               />
             );

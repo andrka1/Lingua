@@ -3,10 +3,8 @@ import HomePage from "./pages/HomePage";
 import FlashcardsPage from "./pages/FlashcardsPage";
 import QuizPage from "./pages/QuizPage";
 import SpellingPage from "./pages/SpellingPage";
-import MatchingPage from "./pages/MatchingPage";
 import VerbFormsPage from "./pages/VerbFormsPage";
 import SentenceBuilderPage from "./pages/SentenceBuilderPage";
-import StatsPage from "./pages/StatsPage";
 import GrammarPage from "./pages/GrammarPage";
 import TensesPage from "./pages/TensesPage";
 import IrregularsPage from "./pages/IrregularsPage";
@@ -24,7 +22,6 @@ export default function App() {
           <Route path="/flashcards/:category" element={<FlashcardsPage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/spelling" element={<SpellingPage />} />
-          <Route path="/match" element={<MatchingPage />} />
           <Route path="/grammar" element={<GrammarPage />} />
           <Route path="/grammar/tenses" element={<TensesPage />} />
           <Route path="/grammar/verb-forms" element={<VerbFormsPage />} />
@@ -33,7 +30,6 @@ export default function App() {
           <Route path="/grammar/exceptions" element={<IrregularsPage />} />
           <Route path="/words" element={<WordsManagerPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/stats" element={<StatsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

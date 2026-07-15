@@ -3,13 +3,11 @@ import { Category } from "../data/words";
 
 interface Props {
   category: Category;
-  learnedCount: number;
   totalCount: number;
 }
 
-export default function CategoryCard({ category, learnedCount, totalCount }: Props) {
+export default function CategoryCard({ category, totalCount }: Props) {
   const navigate = useNavigate();
-  const progress = totalCount > 0 ? Math.round((learnedCount / totalCount) * 100) : 0;
 
   return (
     <button
@@ -25,15 +23,7 @@ export default function CategoryCard({ category, learnedCount, totalCount }: Pro
         </h3>
         <p className="text-xs text-slate-400 mt-0.5">{category.description}</p>
       </div>
-      <div className="flex flex-col items-end gap-1">
-        <span className="text-xs font-medium text-brand-400">{progress}%</span>
-        <div className="w-12 h-1.5 bg-slate-700 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-brand-500 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+      <span className="text-xs font-medium text-slate-500">{totalCount}</span>
     </button>
   );
 }
