@@ -29,6 +29,7 @@ export default function WordsManagerPage() {
   const [version, setVersion] = useState(0);
   const [query, setQuery] = useState("");
   const [onlyMine, setOnlyMine] = useState(false);
+  const [showRemoved, setShowRemoved] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft);
@@ -40,9 +41,10 @@ export default function WordsManagerPage() {
     const q = query.trim().toLowerCase();
     return words.filter((word) => {
       if (onlyMine && !isUserWord(word.id)) return false;
+      if (showRemoved !== excluded.has(word.id)) return false;
       return !q || word.en.toLowerCase().includes(q) || word.ru.toLowerCase().includes(q);
     });
-  }, [query, onlyMine, version]);
+  }, [query, onlyMine, showRemoved, version, excluded]);
 
   const openCreate = () => {
     setEditingId(null);
@@ -102,7 +104,7 @@ export default function WordsManagerPage() {
         <button onClick={() => navigate(-1)} aria-label="Назад" className="icon-button">←</button>
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-display font-bold text-white">Мой словарь</h1>
-          <p className="text-xs text-slate-400">{words.length} карточек · свои слова хранятся на устройстве</p>
+          <p className="text-xs text-slate-400">{words.length - excluded.size} слов в словаре · можно убрать любое</p>
         </div>
         <button onClick={openCreate} className="px-4 h-11 rounded-xl bg-brand-500 text-white font-semibold active:scale-95">+ Слово</button>
       </header>
@@ -115,6 +117,9 @@ export default function WordsManagerPage() {
           Только добавленные мной
           <span className="ml-auto text-slate-500">{filtered.length}</span>
         </label>
+        <button onClick={() => setShowRemoved((value) => !value)} className="mt-2 text-xs text-slate-400 underline underline-offset-4">
+          {showRemoved ? "Показать активные слова" : `Убранные слова (${excluded.size})`}
+        </button>
       </div>
 
       <div className="space-y-2 mt-4">
@@ -134,7 +139,7 @@ export default function WordsManagerPage() {
                   {word.example && <p className="text-xs text-slate-500 mt-2">{word.example}</p>}
                 </div>
                 <button onClick={() => { toggleWordExcluded(word.id); setVersion((value) => value + 1); }} className="text-xs px-3 min-h-11 rounded-xl bg-slate-800 text-slate-300">
-                  {hidden ? "Вернуть" : "Скрыть"}
+                  {hidden ? "Вернуть" : "Убрать"}
                 </button>
               </div>
               {mine && (
@@ -167,7 +172,7 @@ export default function WordsManagerPage() {
               <label className="field-label">Слово на английском *<input autoFocus required value={draft.en} onChange={(event) => setDraft({ ...draft, en: event.target.value })} className="input-field mt-1" placeholder="achievement" /></label>
               <label className="field-label">Перевод *<input required value={draft.ru} onChange={(event) => setDraft({ ...draft, ru: event.target.value })} className="input-field mt-1" placeholder="достижение" /></label>
               <div className="grid grid-cols-2 gap-3">
-                <label className="field-label">Уровень<select value={draft.level} onChange={(event) => setDraft({ ...draft, level: event.target.value as Word["level"] })} className="input-field mt-1"><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select></label>
+                <label className="field-label">Уровень<select value={draft.level} onChange={(event) => setDraft({ ...draft, level: event.target.value as Word["level"] })} className="input-field mt-1"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></label>
                 <label className="field-label">Категория<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })} className="input-field mt-1">{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
               </div>
               <label className="field-label">Транскрипция<input value={draft.transcription} onChange={(event) => setDraft({ ...draft, transcription: event.target.value })} className="input-field ipa mt-1" placeholder="/əˈtʃiːvmənt/" /></label>

@@ -50,7 +50,7 @@ const defaultSettings: AppSettings = {
 };
 
 const defaultProgress: UserProgress = {
-  dataVersion: 2,
+  dataVersion: 3,
   learnedWords: [],
   excludedWords: [],
   quizResults: [],
@@ -81,6 +81,19 @@ export function getProgress(): UserProgress {
       );
       parsed.lastWordOfDay = null;
       parsed.dataVersion = 2;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+    // Версия 3 полностью заменила встроенный словарь. Старые id базовых слов
+    // больше не относятся к тем же карточкам, поэтому не переносим их отметки.
+    if (parsed.dataVersion < 3) {
+      const isPersonalOrUserWord = (id: number) => id >= 10_000;
+      parsed.learnedWords = (parsed.learnedWords || []).filter(isPersonalOrUserWord);
+      parsed.excludedWords = (parsed.excludedWords || []).filter(isPersonalOrUserWord);
+      parsed.wordErrors = Object.fromEntries(
+        Object.entries(parsed.wordErrors || {}).filter(([id]) => isPersonalOrUserWord(Number(id)))
+      );
+      parsed.lastWordOfDay = null;
+      parsed.dataVersion = 3;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
     }
     return {
