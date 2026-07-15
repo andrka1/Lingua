@@ -5,7 +5,7 @@ export interface Word {
   transcription: string;
   example: string;
   category: string;
-  level: "A1" | "A2" | "B1" | "B2";
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
   note?: string; // подсказка/объяснение (идиомы, фразовые глаголы, сложные слова)
 }
 

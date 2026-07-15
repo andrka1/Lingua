@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getProgress,
-  setDailyGoal,
   resetProgress,
 } from "../data/storage";
 
@@ -10,17 +9,13 @@ const STORAGE_KEY = "lingua_mini_progress";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const [goal, setGoal] = useState(getProgress().dailyGoal);
   const [exportText, setExportText] = useState<string | null>(null);
   const [importText, setImportText] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const goals = [5, 10, 15, 20, 30];
-
   const handleReset = () => {
     if (window.confirm("Сбросить весь прогресс? Это действие необратимо.")) {
       resetProgress();
-      setGoal(getProgress().dailyGoal);
       navigate("/");
     }
   };
@@ -63,32 +58,6 @@ export default function SettingsPage() {
           ←
         </button>
         <h1 className="text-2xl font-display font-bold text-white">Настройки</h1>
-      </div>
-
-      {/* Daily goal */}
-      <div className="mb-6">
-        <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-          🎯 Дневная цель
-        </h2>
-        <div className="flex gap-2">
-          {goals.map((g) => (
-            <button
-              key={g}
-              onClick={() => {
-                setDailyGoal(g);
-                setGoal(g);
-              }}
-              className={`flex-1 py-3 rounded-xl text-sm font-medium transition-all ${
-                goal === g
-                  ? "bg-brand-500 text-white"
-                  : "bg-slate-800 text-slate-400 border border-slate-700/50"
-              }`}
-            >
-              {g}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs text-slate-500 mt-2">Сколько слов учить в день</p>
       </div>
 
       {/* Backup */}

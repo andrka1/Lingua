@@ -2,7 +2,7 @@ import { Word } from "./types";
 
 // Твои слова. Добавляй новые объекты в массив по мере изучения.
 // Поля: id (уникальное число), en, ru, transcription (можно ""),
-// example (можно ""), category, level ("A1"|"A2"|"B1"|"B2"), note (необязательно).
+// example (можно ""), category, level ("A1"|"A2"|"B1"|"B2"|"C1"|"C2"), note (необязательно).
 export const myWords: Word[] = [
   { id: 1, en: "spent", ru: "потратил; провёл (о времени); прош. от spend", transcription: "/spent/", example: "I spent all my money.", category: "verbs", level: "A2" },
   { id: 2, en: "suburb", ru: "пригород", transcription: "/ˈsʌbɜːrb/", example: "They live in a quiet suburb.", category: "city", level: "B1" },

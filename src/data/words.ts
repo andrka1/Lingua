@@ -11,7 +11,7 @@ const PERSONAL_OFFSET = 10_000;
 const USER_OFFSET = 1_000_000;
 
 function normalizeWord(value: Partial<Word>, id: number): Word {
-  const level = ["A1", "A2", "B1", "B2"].includes(value.level || "")
+  const level = ["A1", "A2", "B1", "B2", "C1", "C2"].includes(value.level || "")
     ? (value.level as Word["level"])
     : "A1";
   const category = categories.some((item) => item.id === value.category)
