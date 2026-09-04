@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { words } from "../data/words";
+import { words, categories } from "../data/words";
 import { Word } from "../data/types";
 import {
   getExcludedIds,
@@ -10,8 +10,6 @@ import {
   markWordLearned,
   saveQuizResult,
 } from "../data/storage";
-
-const SESSION_SIZE = 12;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -25,62 +23,76 @@ function shuffle<T>(arr: T[]): T[] {
 const normalize = (s: string) => s.toLowerCase().trim().replace(/\s+/g, " ");
 
 type Status = "idle" | "correct" | "wrong";
+type SpellingState = "setup" | "playing" | "finished";
 
 export default function SpellingPage() {
   const navigate = useNavigate();
-  const [round, setRound] = useState(0);
 
-  const deck = useMemo<Word[]>(() => {
-    const excluded = new Set(getExcludedIds());
-    const pool = words.filter((w) => !excluded.has(w.id));
-    const weak = new Set(getWeakWordIds());
-    const weakWords = pool.filter((w) => weak.has(w.id));
-    const rest = pool.filter((w) => !weak.has(w.id));
-    const ordered = [...shuffle(weakWords), ...shuffle(rest)];
-    return ordered.slice(0, SESSION_SIZE);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round]);
+  const [state, setState] = useState<SpellingState>("setup");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [wordCount, setWordCount] = useState(10);
+  const [deck, setDeck] = useState<Word[]>([]);
 
   const [index, setIndex] = useState(0);
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [revealed, setRevealed] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [finished, setFinished] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const word = deck[index];
 
-  // Focus the field whenever a new word appears.
+  // Сколько слов доступно в выбранной категории (для экрана настройки).
+  const availableCount = useMemo(() => {
+    const excluded = new Set(getExcludedIds());
+    return words.filter(
+      (w) =>
+        (selectedCategory === "all" || w.category === selectedCategory) &&
+        !excluded.has(w.id)
+    ).length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, state]);
+
+  // Фокус на поле ввода при появлении нового слова.
   useEffect(() => {
-    if (status === "idle" && !finished) {
+    if (state === "playing" && status === "idle") {
       const t = setTimeout(() => inputRef.current?.focus(), 50);
       return () => clearTimeout(t);
     }
-  }, [index, status, finished]);
+  }, [index, status, state]);
 
-  // Save the session result once, when the round ends.
+  // Сохраняем результат сессии один раз, когда раунд завершён.
   useEffect(() => {
-    if (finished && deck.length > 0) {
-      saveQuizResult(correctCount, deck.length, "spelling");
+    if (state === "finished" && deck.length > 0) {
+      saveQuizResult(
+        correctCount,
+        deck.length,
+        selectedCategory === "all" ? "spelling" : selectedCategory
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finished]);
+  }, [state]);
 
-  if (!word && !finished) {
-    return (
-      <div className="px-5 pt-16 text-center animate-fade-in">
-        <div className="text-5xl mb-4">⌨️</div>
-        <p className="text-slate-400">Нет слов для тренировки.</p>
-        <button
-          onClick={() => navigate("/")}
-          className="mt-6 px-6 py-3 rounded-2xl bg-brand-500 text-white font-medium active:scale-95 transition-all"
-        >
-          На главную
-        </button>
-      </div>
-    );
-  }
+  const start = () => {
+    const excluded = new Set(getExcludedIds());
+    const inCategory = (w: Word) =>
+      selectedCategory === "all" ? true : w.category === selectedCategory;
+
+    const pool = words.filter((w) => inCategory(w) && !excluded.has(w.id));
+    const weak = new Set(getWeakWordIds());
+    const weakWords = pool.filter((w) => weak.has(w.id));
+    const rest = pool.filter((w) => !weak.has(w.id));
+    const ordered = [...shuffle(weakWords), ...shuffle(rest)];
+    const selected = ordered.slice(0, Math.min(wordCount, ordered.length));
+
+    setDeck(selected);
+    setIndex(0);
+    setValue("");
+    setStatus("idle");
+    setRevealed(false);
+    setCorrectCount(0);
+    setState("playing");
+  };
 
   const check = () => {
     if (!word) return;
@@ -98,7 +110,7 @@ export default function SpellingPage() {
 
   const next = () => {
     if (index + 1 >= deck.length) {
-      setFinished(true);
+      setState("finished");
       return;
     }
     setIndex((i) => i + 1);
@@ -111,16 +123,6 @@ export default function SpellingPage() {
     if (!word || status !== "idle") return;
     setStatus("wrong");
     recordWordError(word.id);
-  };
-
-  const restart = () => {
-    setRound((r) => r + 1);
-    setIndex(0);
-    setValue("");
-    setStatus("idle");
-    setRevealed(false);
-    setCorrectCount(0);
-    setFinished(false);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -136,8 +138,91 @@ export default function SpellingPage() {
       .map((ch, i) => (i === 0 || ch === " " ? ch : "·"))
       .join("");
 
-  // ---- Finished screen ----
-  if (finished) {
+  // ---- Экран настройки ----
+  if (state === "setup") {
+    return (
+      <div className="px-5 pt-6 pb-4 animate-fade-in">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => navigate("/")}
+            className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/50 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+          >
+            ←
+          </button>
+          <div className="flex-1">
+            <h1 className="text-2xl font-display font-bold text-white">Письмо</h1>
+            <p className="text-slate-400 text-sm">Впиши слово по буквам</p>
+          </div>
+        </div>
+
+        {/* Category */}
+        <div className="mb-5">
+          <label className="text-sm font-medium text-slate-300 mb-3 block">Категория</label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                selectedCategory === "all"
+                  ? "bg-brand-500 text-white"
+                  : "bg-slate-800 text-slate-400 border border-slate-700/50"
+              }`}
+            >
+              🌐 Все
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                  selectedCategory === cat.id
+                    ? "bg-brand-500 text-white"
+                    : "bg-slate-800 text-slate-400 border border-slate-700/50"
+                }`}
+              >
+                {cat.emoji} {cat.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Word count */}
+        <div className="mb-6">
+          <label className="text-sm font-medium text-slate-300 mb-3 block">Количество слов</label>
+          <div className="flex gap-2">
+            {[5, 10, 15, 20].map((count) => (
+              <button
+                key={count}
+                onClick={() => setWordCount(count)}
+                className={`flex-1 py-3 rounded-xl text-sm font-medium transition-all ${
+                  wordCount === count
+                    ? "bg-brand-500 text-white"
+                    : "bg-slate-800 text-slate-400 border border-slate-700/50"
+                }`}
+              >
+                {count}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-slate-500 mt-3">
+            Доступно слов: {availableCount}. В раунде будет{" "}
+            {Math.min(wordCount, availableCount)}.
+          </p>
+        </div>
+
+        <button
+          onClick={start}
+          disabled={availableCount === 0}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-400 text-white font-semibold text-base active:scale-[0.98] transition-all disabled:opacity-40"
+        >
+          {availableCount === 0 ? "Нет слов для тренировки" : "Начать"}
+        </button>
+      </div>
+    );
+  }
+
+  // ---- Экран результата ----
+  if (state === "finished") {
     const pct = deck.length ? Math.round((correctCount / deck.length) * 100) : 0;
     const emoji = pct >= 80 ? "🏆" : pct >= 50 ? "👍" : "💪";
     return (
@@ -150,10 +235,16 @@ export default function SpellingPage() {
         </p>
         <div className="flex flex-col gap-3 w-full max-w-xs">
           <button
-            onClick={restart}
+            onClick={start}
             className="py-3.5 rounded-2xl bg-brand-500 text-white font-medium active:scale-95 transition-all"
           >
             🔁 Ещё раунд
+          </button>
+          <button
+            onClick={() => setState("setup")}
+            className="py-3.5 rounded-2xl bg-slate-800 border border-slate-700/50 text-slate-300 font-medium active:scale-95 transition-all"
+          >
+            ⚙️ Изменить настройки
           </button>
           <button
             onClick={() => navigate("/")}
@@ -166,7 +257,22 @@ export default function SpellingPage() {
     );
   }
 
-  // ---- Active screen ----
+  // ---- Активный экран ----
+  if (!word) {
+    return (
+      <div className="px-5 pt-16 text-center animate-fade-in">
+        <div className="text-5xl mb-4">⌨️</div>
+        <p className="text-slate-400">Нет слов для тренировки.</p>
+        <button
+          onClick={() => setState("setup")}
+          className="mt-6 px-6 py-3 rounded-2xl bg-brand-500 text-white font-medium active:scale-95 transition-all"
+        >
+          К настройкам
+        </button>
+      </div>
+    );
+  }
+
   const progressPct = Math.round((index / deck.length) * 100);
   const barStyle = { width: progressPct + "%" };
   return (
@@ -174,7 +280,7 @@ export default function SpellingPage() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => setState("setup")}
           className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/50 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
         >
           ←

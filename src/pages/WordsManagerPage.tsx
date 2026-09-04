@@ -11,6 +11,7 @@ import {
   isUserWord,
   type Word,
 } from "../data/words";
+import { addCategory, removeCategory, isUserCategory } from "../data/categories";
 import { getExcludedIds, toggleWordExcluded } from "../data/storage";
 
 type Draft = Omit<Word, "id">;
@@ -35,7 +36,33 @@ export default function WordsManagerPage() {
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [error, setError] = useState("");
   const [backup, setBackup] = useState("");
+  const [catName, setCatName] = useState("");
+  const [catEmoji, setCatEmoji] = useState("");
+  const [catError, setCatError] = useState("");
   const excluded = useMemo(() => new Set(getExcludedIds()), [version]);
+
+  const saveCategory = (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      addCategory({ name: catName, emoji: catEmoji });
+      setCatName("");
+      setCatEmoji("");
+      setCatError("");
+      setVersion((value) => value + 1);
+    } catch (reason) {
+      setCatError(reason instanceof Error ? reason.message : "Не удалось добавить категорию");
+    }
+  };
+
+  const removeCat = (id: string, name: string) => {
+    const mine = isUserCategory(id);
+    const message = mine
+      ? `Удалить категорию «${name}»?`
+      : `Скрыть категорию «${name}»? Слова из неё останутся в словаре.`;
+    if (!window.confirm(message)) return;
+    removeCategory(id);
+    setVersion((value) => value + 1);
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -152,6 +179,26 @@ export default function WordsManagerPage() {
           );
         })}
       </div>
+
+      <details className="mt-6 rounded-2xl bg-slate-900 border border-slate-800 p-4">
+        <summary className="font-semibold text-white cursor-pointer">Категории ({categories.length})</summary>
+        <p className="text-xs text-slate-400 mt-2">Добавляй свои категории или убирай ненужные. При удалении встроенной категории слова из неё остаются в словаре.</p>
+        <form onSubmit={saveCategory} className="flex gap-2 mt-3">
+          <input value={catEmoji} onChange={(event) => setCatEmoji(event.target.value)} placeholder="🏷️" maxLength={2} aria-label="Эмодзи" className="input-field w-14 text-center" />
+          <input value={catName} onChange={(event) => setCatName(event.target.value)} placeholder="Название категории" aria-label="Название категории" className="input-field flex-1" />
+          <button type="submit" disabled={!catName.trim()} className="px-4 rounded-xl bg-brand-500 text-white font-semibold disabled:opacity-40">Добавить</button>
+        </form>
+        {catError && <p role="alert" className="text-sm text-red-300 bg-red-500/10 rounded-xl p-3 mt-2">{catError}</p>}
+        <div className="flex flex-wrap gap-2 mt-3">
+          {categories.map((category) => (
+            <span key={category.id} className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800 text-slate-200 text-sm">
+              <span>{category.emoji} {category.name}</span>
+              {isUserCategory(category.id) && <span className="tag tag-blue">моё</span>}
+              <button type="button" onClick={() => removeCat(category.id, category.name)} aria-label={`Убрать ${category.name}`} className="text-slate-400 hover:text-red-300 text-base leading-none">×</button>
+            </span>
+          ))}
+        </div>
+      </details>
 
       <details className="mt-6 rounded-2xl bg-slate-900 border border-slate-800 p-4">
         <summary className="font-semibold text-white cursor-pointer">Импорт и экспорт своих слов</summary>
