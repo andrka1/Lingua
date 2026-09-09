@@ -105,12 +105,24 @@ export default function TensesPage() {
             <p className="text-xs text-amber-300/80 mb-3">
               Маркеры: {t.markers}
             </p>
-            <div className="space-y-1">
-              {t.examples.map((ex, i) => (
-                <p key={i} className="text-sm text-slate-300">
-                  {ex.en} — {ex.ru}
-                </p>
-              ))}
+            <div className="space-y-2">
+              {[t.forms.affirmative, t.forms.negative, t.forms.question].map(
+                (f) => (
+                  <div
+                    key={f.label}
+                    className="rounded-xl bg-slate-900/50 border border-slate-700/40 p-3"
+                  >
+                    <p className="text-xs font-semibold text-slate-200 mb-1">
+                      {f.icon} {f.label}
+                    </p>
+                    <p className="text-xs font-mono text-emerald-300/90 mb-1">
+                      Как образуется: {f.formula}
+                    </p>
+                    <p className="text-sm text-slate-200">{f.example.en}</p>
+                    <p className="text-xs text-slate-500">{f.example.ru}</p>
+                  </div>
+                )
+              )}
             </div>
           </div>
         ))}

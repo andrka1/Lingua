@@ -1,13 +1,34 @@
 // Grammar data: English tenses theory + practice exercises (B2 / IELTS 5.5+)
+// Для каждого времени показано, как образуются 3 типа предложений:
+// утверждение (+), отрицание (−) и вопрос (?) — с формулой и примером.
+
+export interface TenseExample {
+  en: string;
+  ru: string;
+}
+
+export interface TenseForm {
+  label: string; // Утверждение / Отрицание / Вопрос
+  icon: string; // эмодзи формы
+  formula: string; // как образуется именно эта форма
+  example: TenseExample;
+}
+
+export interface TenseForms {
+  affirmative: TenseForm; // утверждение (+)
+  negative: TenseForm; // отрицание (−)
+  question: TenseForm; // вопрос (?)
+}
 
 export interface TenseTopic {
   id: string;
   name: string; // English name
   nameRu: string; // Russian name
-  formula: string;
+  formula: string; // краткая общая формула
   usage: string; // when to use (RU)
   markers: string; // signal words
-  examples: { en: string; ru: string }[];
+  forms: TenseForms; // как образуются +/−/? с примерами
+  examples: TenseExample[]; // [утверждение, отрицание, вопрос] — для других экранов
 }
 
 export type ExerciseKind = "fill" | "identify";
@@ -25,19 +46,36 @@ export interface GrammarExercise {
   explanation: string; // RU explanation
 }
 
-export const tenses: TenseTopic[] = [
+type TenseTopicInput = Omit<TenseTopic, "examples">;
+
+const tenseTopics: TenseTopicInput[] = [
   {
     id: "present-simple",
     name: "Present Simple",
     nameRu: "Настоящее простое",
-    formula: "V / V-s (he/she/it) · do/does not + V",
+    formula: "V / V-s (he/she/it)",
     usage: "Факты, привычки, расписания и регулярные действия.",
     markers: "always, usually, often, every day, sometimes, never",
-    examples: [
-      { en: "She works in a bank.", ru: "Она работает в банке." },
-      { en: "Water boils at 100°C.", ru: "Вода кипит при 100°C." },
-      { en: "I don't drink coffee.", ru: "Я не пью кофе." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "I/you/we/they + V · he/she/it + V-s/-es",
+        example: { en: "She works in a bank.", ru: "Она работает в банке." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "do/does + not + V (глагол без -s)",
+        example: { en: "She doesn't work on Sundays.", ru: "Она не работает по воскресеньям." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Do/Does + подлежащее + V?",
+        example: { en: "Does she work here?", ru: "Она здесь работает?" },
+      },
+    },
   },
   {
     id: "present-continuous",
@@ -46,11 +84,26 @@ export const tenses: TenseTopic[] = [
     formula: "am / is / are + V-ing",
     usage: "Действие происходит сейчас или в данный период; временные ситуации.",
     markers: "now, at the moment, currently, today, these days",
-    examples: [
-      { en: "I am studying English now.", ru: "Я сейчас учу английский." },
-      { en: "They are building a new bridge.", ru: "Они строят новый мост." },
-      { en: "He is not working today.", ru: "Он сегодня не работает." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "am/is/are + V-ing",
+        example: { en: "I am studying English now.", ru: "Я сейчас учу английский." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "am/is/are + not + V-ing",
+        example: { en: "He is not working today.", ru: "Он сегодня не работает." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Am/Is/Are + подлежащее + V-ing?",
+        example: { en: "Are you listening to me?", ru: "Ты меня слушаешь?" },
+      },
+    },
   },
   {
     id: "present-perfect",
@@ -59,11 +112,26 @@ export const tenses: TenseTopic[] = [
     formula: "have / has + V3 (past participle)",
     usage: "Результат в настоящем; опыт; действие, завершённое к настоящему моменту.",
     markers: "just, already, yet, ever, never, since, for, recently",
-    examples: [
-      { en: "I have finished my homework.", ru: "Я закончил домашнюю работу." },
-      { en: "She has lived here for ten years.", ru: "Она живёт здесь десять лет." },
-      { en: "Have you ever been to London?", ru: "Ты когда-нибудь был в Лондоне?" },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "have/has + V3 (3-я форма)",
+        example: { en: "I have finished my homework.", ru: "Я закончил домашнюю работу." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "have/has + not + V3",
+        example: { en: "She hasn't called me yet.", ru: "Она мне ещё не позвонила." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Have/Has + подлежащее + V3?",
+        example: { en: "Have you ever been to London?", ru: "Ты когда-нибудь был в Лондоне?" },
+      },
+    },
   },
   {
     id: "present-perfect-continuous",
@@ -72,23 +140,54 @@ export const tenses: TenseTopic[] = [
     formula: "have / has been + V-ing",
     usage: "Действие началось в прошлом, длилось и связано с настоящим (важна длительность).",
     markers: "for, since, all day, how long, lately",
-    examples: [
-      { en: "I have been studying for three hours.", ru: "Я учусь уже три часа." },
-      { en: "It has been raining since morning.", ru: "Дождь идёт с утра." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "have/has + been + V-ing",
+        example: { en: "I have been studying for three hours.", ru: "Я учусь уже три часа." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "have/has + not + been + V-ing",
+        example: { en: "She hasn't been feeling well lately.", ru: "В последнее время она плохо себя чувствует." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Have/Has + подлежащее + been + V-ing?",
+        example: { en: "How long have you been waiting?", ru: "Как долго ты ждёшь?" },
+      },
+    },
   },
   {
     id: "past-simple",
     name: "Past Simple",
     nameRu: "Прошедшее простое",
-    formula: "V2 (V-ed / irregular) · did not + V",
+    formula: "V2 (V-ed / irregular)",
     usage: "Завершённое действие в прошлом с указанием времени.",
     markers: "yesterday, ago, last week, in 2010, when",
-    examples: [
-      { en: "We visited Rome last year.", ru: "Мы ездили в Рим в прошлом году." },
-      { en: "He went home early.", ru: "Он ушёл домой рано." },
-      { en: "I didn't see her.", ru: "Я её не видел." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "V2 (V-ed или неправильный глагол)",
+        example: { en: "We visited Rome last year.", ru: "Мы ездили в Рим в прошлом году." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "did + not + V (базовая форма)",
+        example: { en: "I didn't see her yesterday.", ru: "Я вчера её не видел." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Did + подлежащее + V?",
+        example: { en: "Did you call him?", ru: "Ты ему звонил?" },
+      },
+    },
   },
   {
     id: "past-continuous",
@@ -97,10 +196,26 @@ export const tenses: TenseTopic[] = [
     formula: "was / were + V-ing",
     usage: "Действие длилось в определённый момент прошлого; фон для другого действия.",
     markers: "while, when, at 5 pm yesterday, as",
-    examples: [
-      { en: "I was cooking when he called.", ru: "Я готовил, когда он позвонил." },
-      { en: "They were watching TV all evening.", ru: "Они смотрели ТВ весь вечер." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "was/were + V-ing",
+        example: { en: "I was cooking when he called.", ru: "Я готовил, когда он позвонил." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "was/were + not + V-ing",
+        example: { en: "They were not watching TV.", ru: "Они не смотрели телевизор." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Was/Were + подлежащее + V-ing?",
+        example: { en: "What were you doing at 8 pm?", ru: "Что ты делал в 8 вечера?" },
+      },
+    },
   },
   {
     id: "past-perfect",
@@ -109,10 +224,26 @@ export const tenses: TenseTopic[] = [
     formula: "had + V3 (past participle)",
     usage: "Действие, завершённое раньше другого действия в прошлом.",
     markers: "by the time, before, after, already, when",
-    examples: [
-      { en: "The train had left before we arrived.", ru: "Поезд ушёл до того, как мы приехали." },
-      { en: "She had already eaten.", ru: "Она уже поела." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "had + V3 (3-я форма)",
+        example: { en: "The train had left before we arrived.", ru: "Поезд ушёл до того, как мы приехали." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "had + not + V3",
+        example: { en: "She hadn't finished her work by then.", ru: "К тому моменту она не закончила работу." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Had + подлежащее + V3?",
+        example: { en: "Had they met before the party?", ru: "Они встречались до вечеринки?" },
+      },
+    },
   },
   {
     id: "past-perfect-continuous",
@@ -121,10 +252,26 @@ export const tenses: TenseTopic[] = [
     formula: "had been + V-ing",
     usage: "Действие длилось до другого действия в прошлом (акцент на длительности).",
     markers: "for, since, before, until, how long",
-    examples: [
-      { en: "I had been waiting for two hours before the bus came.", ru: "Я ждал два часа, прежде чем пришёл автобус." },
-      { en: "She had been working there since 2010.", ru: "Она работала там с 2010 года." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "had + been + V-ing",
+        example: { en: "I had been waiting for two hours before the bus came.", ru: "Я ждал два часа, прежде чем пришёл автобус." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "had + not + been + V-ing",
+        example: { en: "He hadn't been sleeping well before the exam.", ru: "Перед экзаменом он плохо спал." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Had + подлежащее + been + V-ing?",
+        example: { en: "How long had she been working there?", ru: "Как долго она там работала?" },
+      },
+    },
   },
   {
     id: "future-simple",
@@ -133,10 +280,26 @@ export const tenses: TenseTopic[] = [
     formula: "will + V",
     usage: "Спонтанные решения, прогнозы, обещания, факты о будущем.",
     markers: "tomorrow, next week, soon, I think, probably",
-    examples: [
-      { en: "I will call you tomorrow.", ru: "Я позвоню тебе завтра." },
-      { en: "It will rain later.", ru: "Позже пойдёт дождь." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "will + V (базовая форма)",
+        example: { en: "I will call you tomorrow.", ru: "Я позвоню тебе завтра." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "will + not (won't) + V",
+        example: { en: "I won't be late.", ru: "Я не опоздаю." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Will + подлежащее + V?",
+        example: { en: "Will you help me?", ru: "Ты мне поможешь?" },
+      },
+    },
   },
   {
     id: "future-going-to",
@@ -145,10 +308,26 @@ export const tenses: TenseTopic[] = [
     formula: "am / is / are going to + V",
     usage: "Планы, намерения и предсказания на основе очевидных признаков.",
     markers: "tonight, this weekend, plan, intend",
-    examples: [
-      { en: "I am going to start a new course.", ru: "Я собираюсь начать новый курс." },
-      { en: "Look at the clouds — it is going to rain.", ru: "Посмотри на тучи — будет дождь." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "am/is/are + going to + V",
+        example: { en: "I am going to start a new course.", ru: "Я собираюсь начать новый курс." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "am/is/are + not + going to + V",
+        example: { en: "We aren't going to travel this summer.", ru: "Этим летом мы не собираемся путешествовать." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Am/Is/Are + подлежащее + going to + V?",
+        example: { en: "Are you going to buy a car?", ru: "Ты собираешься покупать машину?" },
+      },
+    },
   },
   {
     id: "future-continuous",
@@ -157,10 +336,26 @@ export const tenses: TenseTopic[] = [
     formula: "will be + V-ing",
     usage: "Действие будет длиться в определённый момент в будущем.",
     markers: "at this time tomorrow, at 8 pm, all day",
-    examples: [
-      { en: "This time tomorrow I will be flying to Paris.", ru: "Завтра в это время я буду лететь в Париж." },
-      { en: "She will be working at 9 am.", ru: "В 9 утра она будет работать." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "will + be + V-ing",
+        example: { en: "This time tomorrow I will be flying to Paris.", ru: "Завтра в это время я буду лететь в Париж." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "will + not + be + V-ing",
+        example: { en: "I won't be working tomorrow morning.", ru: "Завтра утром я не буду работать." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Will + подлежащее + be + V-ing?",
+        example: { en: "Will you be using the car tonight?", ru: "Ты будешь пользоваться машиной сегодня вечером?" },
+      },
+    },
   },
   {
     id: "future-perfect",
@@ -169,10 +364,26 @@ export const tenses: TenseTopic[] = [
     formula: "will have + V3 (past participle)",
     usage: "Действие, которое завершится к определённому моменту в будущем.",
     markers: "by, by the time, before, until, next year",
-    examples: [
-      { en: "I will have finished the report by 5 pm.", ru: "Я закончу отчёт к 5 вечера." },
-      { en: "By next year she will have graduated.", ru: "К следующему году она закончит университет." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "will + have + V3 (3-я форма)",
+        example: { en: "I will have finished the report by 5 pm.", ru: "Я закончу отчёт к 5 вечера." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "will + not + have + V3",
+        example: { en: "She won't have finished by Monday.", ru: "К понедельнику она не закончит." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Will + подлежащее + have + V3?",
+        example: { en: "Will you have arrived by noon?", ru: "Ты приедешь к полудню?" },
+      },
+    },
   },
   {
     id: "future-perfect-continuous",
@@ -181,12 +392,37 @@ export const tenses: TenseTopic[] = [
     formula: "will have been + V-ing",
     usage: "Действие будет длиться вплоть до определённого момента в будущем (акцент на длительности).",
     markers: "by ... for, by then, by the time, for",
-    examples: [
-      { en: "By next month I will have been working here for five years.", ru: "К следующему месяцу я проработаю здесь уже пять лет." },
-      { en: "By 6 pm they will have been driving for ten hours.", ru: "К 6 вечера они будут в пути уже десять часов." },
-    ],
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "will + have + been + V-ing",
+        example: { en: "By next month I will have been working here for five years.", ru: "К следующему месяцу я проработаю здесь уже пять лет." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "will + not + have + been + V-ing",
+        example: { en: "By June they won't have been living here for long.", ru: "К июню они будут жить здесь недолго." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Will + подлежащее + have been + V-ing?",
+        example: { en: "Will you have been driving for ten hours by then?", ru: "К тому моменту ты будешь за рулём уже десять часов?" },
+      },
+    },
   },
 ];
+
+export const tenses: TenseTopic[] = tenseTopics.map((t) => ({
+  ...t,
+  examples: [
+    t.forms.affirmative.example,
+    t.forms.negative.example,
+    t.forms.question.example,
+  ],
+}));
 
 export const grammarExercises: GrammarExercise[] = [
   // Present Simple
