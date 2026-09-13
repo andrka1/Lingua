@@ -18,9 +18,12 @@ export default function GrammarExerciseCard({
   const [selected, setSelected] = useState<number | null>(null);
   const answered = selected !== null;
   const isIdentify = exercise.kind === "identify";
-  const [before, after] = isIdentify
-    ? [exercise.sentence, ""]
-    : exercise.sentence.split("___");
+  // Разбиваем по пропускам. Если в предложении несколько "___",
+  // чип с ответом ставим на место первого, а весь оставшийся текст
+  // сохраняем (раньше хвост после второго пропуска терялся).
+  const segments = isIdentify ? [exercise.sentence] : exercise.sentence.split("___");
+  const before = segments[0];
+  const after = segments.slice(1).join("");
 
   // Перемешиваем варианты ответа, чтобы правильный не стоял всегда на одном месте.
   // Пересчитывается при смене задания.
