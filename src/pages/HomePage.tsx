@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { categories, words } from "../data/words";
-import { getProgress, getWordOfDay, getExcludedIds } from "../data/storage";
+import { getProgress, getExcludedIds } from "../data/storage";
 import CategoryCard from "../components/CategoryCard";
 
 export default function HomePage() {
@@ -11,8 +11,6 @@ export default function HomePage() {
     (w) => !progress.learnedWords.includes(w.id) && !excluded.has(w.id)
   ).length;
 
-  const wordOfDayId = getWordOfDay(words);
-  const wordOfDay = words.find((w) => w.id === wordOfDayId);
 
   return (
     <div className="px-5 pt-8 pb-4 animate-fade-in">
@@ -39,22 +37,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Word of the day */}
-      {wordOfDay && (
-        <div className="mb-6 p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20">
-          <div className="mb-3">
-            <span className="text-xs uppercase tracking-widest text-indigo-400 font-medium">
-              Слово дня
-            </span>
-          </div>
-          <h3 className="text-2xl font-display font-bold text-white mb-1">{wordOfDay.en}</h3>
-          <p className="text-sm text-slate-400 ipa mb-1">{wordOfDay.transcription}</p>
-          <p className="text-base text-indigo-200">{wordOfDay.ru}</p>
-          {wordOfDay.example && (
-            <p className="text-xs text-slate-500 mt-2 italic">«{wordOfDay.example}»</p>
-          )}
-        </div>
-      )}
 
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-3 mb-3">

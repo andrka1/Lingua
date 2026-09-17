@@ -302,34 +302,6 @@ const tenseTopics: TenseTopicInput[] = [
     },
   },
   {
-    id: "future-going-to",
-    name: "Future: going to",
-    nameRu: "Будущее: be going to",
-    formula: "am / is / are going to + V",
-    usage: "Планы, намерения и предсказания на основе очевидных признаков.",
-    markers: "tonight, this weekend, plan, intend",
-    forms: {
-      affirmative: {
-        label: "Утверждение",
-        icon: "✅",
-        formula: "am/is/are + going to + V",
-        example: { en: "I am going to start a new course.", ru: "Я собираюсь начать новый курс." },
-      },
-      negative: {
-        label: "Отрицание",
-        icon: "❌",
-        formula: "am/is/are + not + going to + V",
-        example: { en: "We aren't going to travel this summer.", ru: "Этим летом мы не собираемся путешествовать." },
-      },
-      question: {
-        label: "Вопрос",
-        icon: "❓",
-        formula: "Am/Is/Are + подлежащее + going to + V?",
-        example: { en: "Are you going to buy a car?", ru: "Ты собираешься покупать машину?" },
-      },
-    },
-  },
-  {
     id: "future-continuous",
     name: "Future Continuous",
     nameRu: "Будущее длительное",
@@ -456,9 +428,6 @@ export const grammarExercises: GrammarExercise[] = [
   // Future Simple
   { id: 19, tenseId: "future-simple", sentence: "I think it ___ snow tomorrow.", hint: "will?", options: ["will", "is going to", "going to", "shall"], answer: 0, explanation: "Прогноз с I think → will." },
   { id: 20, tenseId: "future-simple", sentence: "Don't worry, I ___ help you.", hint: "promise", options: ["am helping", "will", "helped", "help"], answer: 1, explanation: "Спонтанное обещание → will help." },
-  // Future going to
-  { id: 21, tenseId: "future-going-to", sentence: "We ___ visit grandma this weekend (plan).", hint: "plan", options: ["will", "are going to", "go", "going"], answer: 1, explanation: "Заранее запланированное действие → be going to." },
-  { id: 22, tenseId: "future-going-to", sentence: "Look at the sky! It ___ rain.", hint: "evidence", options: ["will", "is going to", "rains", "rained"], answer: 1, explanation: "Предсказание по очевидным признакам → is going to." },
   // Future Continuous
   { id: 23, tenseId: "future-continuous", sentence: "At 9 am tomorrow I ___ an exam.", hint: "take", options: ["will take", "will be taking", "take", "am taking"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
   // Future Perfect
@@ -497,9 +466,6 @@ export const grammarExercises: GrammarExercise[] = [
   // Future Simple (+2)
   { id: 47, tenseId: "future-simple", sentence: "Maybe we ___ go to the beach if it's sunny.", hint: "will?", options: ["are going to", "will", "go", "are"], answer: 1, explanation: "Неуверенность (maybe) → will." },
   { id: 48, tenseId: "future-simple", sentence: "The phone is ringing — I ___ answer it.", hint: "spontaneous", options: ["am going to", "will", "answer", "am answering"], answer: 1, explanation: "Спонтанное решение в момент речи → will." },
-  // Future going to (+2)
-  { id: 49, tenseId: "future-going-to", sentence: "I've decided: I ___ learn Italian next year.", hint: "plan", options: ["will", "am going to", "go to", "going to"], answer: 1, explanation: "Заранее принятое решение/намерение → be going to." },
-  { id: 50, tenseId: "future-going-to", sentence: "She bought paint — she ___ redecorate her room.", hint: "intention", options: ["will", "is going to", "redecorates", "is redecorating"], answer: 1, explanation: "Намерение, подтверждённое признаками → be going to." },
   // Future Continuous (+3)
   { id: 51, tenseId: "future-continuous", sentence: "Don't call at 8 — I ___ dinner then.", hint: "have", options: ["will have", "will be having", "have", "am having"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
   { id: 52, tenseId: "future-continuous", sentence: "This time next week we ___ on a beach in Italy.", hint: "relax", options: ["will be relaxing", "will relax", "relax", "are relaxing"], answer: 0, explanation: "Длительное действие в конкретный момент будущего → will be relaxing." },
@@ -593,11 +559,6 @@ export const grammarExercises: GrammarExercise[] = [
   { id: 115, tenseId: "future-simple", sentence: "I think our team ___ win the match.", hint: "will?", options: ["will", "is going to", "wins", "won"], answer: 0, explanation: "Мнение/прогноз с I think → will." },
   { id: 116, tenseId: "future-simple", sentence: "The meeting ___ probably start late.", hint: "will", options: ["will", "is", "does", "would"], answer: 0, explanation: "probably → прогноз с will." },
 
-  // ----- Future: going to -----
-  { id: 117, tenseId: "future-going-to", sentence: "I ___ visit my grandparents next week.", hint: "plan", options: ["will", "am going to", "go", "going"], answer: 1, explanation: "Заранее запланировано → be going to." },
-  { id: 118, tenseId: "future-going-to", sentence: "Careful! You ___ drop that glass.", hint: "evidence", options: ["will", "are going to", "drop", "dropped"], answer: 1, explanation: "Предсказание по очевидным признакам → be going to." },
-  { id: 119, tenseId: "future-going-to", sentence: "We ___ going to buy a new car this year.", hint: "отрицание", options: ["aren't", "don't", "won't", "isn't"], answer: 0, explanation: "we → отрицание aren't going to + V." },
-  { id: 120, tenseId: "future-going-to", sentence: "___ she going to study abroad?", hint: "вопрос", options: ["Is", "Does", "Will", "Are"], answer: 0, explanation: "she → вопрос Is + подлежащее + going to + V." },
 
   // ----- Future Continuous -----
   { id: 121, tenseId: "future-continuous", sentence: "This time next week I ___ on a plane to Tokyo.", hint: "sit", options: ["will sit", "will be sitting", "sit", "am sitting"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
@@ -622,7 +583,6 @@ export const grammarExercises: GrammarExercise[] = [
   { id: 134, tenseId: "past-simple", kind: "identify", sentence: "They played football yesterday.", options: ["Past Simple", "Past Continuous", "Present Perfect", "Past Perfect"], answer: 0, explanation: "V2 (played) + yesterday → Past Simple." },
   { id: 135, tenseId: "present-perfect-continuous", kind: "identify", sentence: "He has been working since morning.", options: ["Present Perfect", "Present Perfect Continuous", "Past Perfect Continuous", "Present Continuous"], answer: 1, explanation: "has been + V-ing + since → Present Perfect Continuous." },
   { id: 136, tenseId: "future-simple", kind: "identify", sentence: "I will call you later.", options: ["Future Continuous", "Future Simple", "Future: going to", "Future Perfect"], answer: 1, explanation: "will + V → Future Simple." },
-  { id: 137, tenseId: "future-going-to", kind: "identify", sentence: "Look at those clouds — it is going to rain.", options: ["Future Simple", "Future Continuous", "Future: going to", "Present Continuous"], answer: 2, explanation: "is going to + V + очевидные признаки → be going to." },
   { id: 138, tenseId: "past-perfect-continuous", kind: "identify", sentence: "She had been studying for hours before the exam.", options: ["Past Perfect", "Past Perfect Continuous", "Present Perfect Continuous", "Past Continuous"], answer: 1, explanation: "had been + V-ing + before → Past Perfect Continuous." },
   { id: 139, tenseId: "present-simple", kind: "identify", sentence: "He plays the guitar every evening.", options: ["Present Continuous", "Present Simple", "Present Perfect", "Past Simple"], answer: 1, explanation: "V-s + every evening → Present Simple." },
   { id: 140, tenseId: "past-continuous", kind: "identify", sentence: "I was reading when she arrived.", options: ["Past Simple", "Past Continuous", "Past Perfect", "Present Continuous"], answer: 1, explanation: "was + V-ing (фон) → Past Continuous." },
