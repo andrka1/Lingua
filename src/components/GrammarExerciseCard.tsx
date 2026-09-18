@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { GrammarExercise } from "../data/grammar";
-import { speak } from "../data/storage";
 
 interface Props {
   exercise: GrammarExercise;
@@ -48,13 +47,6 @@ export default function GrammarExerciseCard({
     const correct = selected === correctIndex;
     setSelected(null);
     onAnswer(correct);
-  };
-
-  const handleSpeak = () => {
-    const fullSentence = isIdentify
-      ? exercise.sentence
-      : exercise.sentence.replace("___", opts[correctIndex]);
-    speak(fullSentence, "en-US");
   };
 
   const optionStyle = (i: number) => {
@@ -109,19 +101,6 @@ export default function GrammarExerciseCard({
           <p className="text-sm text-amber-300/80 mt-2">💡 {exercise.hint}</p>
         )}
       </div>
-
-      {/* Audio button */}
-      <button
-        onClick={handleSpeak}
-        className="w-full mb-4 py-3 rounded-xl bg-slate-800 border border-slate-700/50 text-slate-300 font-medium transition-all active:scale-95 flex items-center justify-center gap-2 hover:bg-slate-700"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-        </svg>
-        Прослушать предложение
-      </button>
 
       {/* Options */}
       <div className="space-y-2 mb-4">

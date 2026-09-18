@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { grammarTopics } from "../data/grammarTopics";
 import { GrammarExercise } from "../data/grammar";
-import { saveGrammarResult, speak } from "../data/storage";
+import { saveGrammarResult } from "../data/storage";
 import GrammarExerciseCard from "../components/GrammarExerciseCard";
 
 function shuffle<T>(arr: T[]): T[] {
@@ -124,17 +124,13 @@ export default function GrammarTopicPage() {
               {rule.examples && (
                 <div className="mt-3 space-y-1.5">
                   {rule.examples.map((ex, j) => (
-                    <button
+                    <div
                       key={j}
-                      onClick={() => speak(ex.en, "en-US")}
-                      className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-xl bg-slate-900/50 border border-slate-700/30 active:scale-[0.99]"
+                      className="px-3 py-2 rounded-xl bg-slate-900/50 border border-slate-700/30"
                     >
-                      <span className="text-brand-300">🔊</span>
-                      <span className="flex-1">
-                        <span className="text-white font-medium">{ex.en}</span>
-                        <span className="block text-[12px] text-slate-500">{ex.ru}</span>
-                      </span>
-                    </button>
+                      <span className="text-white font-medium">{ex.en}</span>
+                      <span className="block text-[12px] text-slate-500">{ex.ru}</span>
+                    </div>
                   ))}
                 </div>
               )}
