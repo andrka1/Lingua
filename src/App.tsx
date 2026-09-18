@@ -4,7 +4,7 @@ import HomePage from "./pages/HomePage";
 import FlashcardsPage from "./pages/FlashcardsPage";
 import QuizPage from "./pages/QuizPage";
 import SpellingPage from "./pages/SpellingPage";
-import VerbFormsPage from "./pages/VerbFormsPage";
+import GrammarTopicPage from "./pages/GrammarTopicPage";
 import SentenceBuilderPage from "./pages/SentenceBuilderPage";
 import GrammarPage from "./pages/GrammarPage";
 import TensesPage from "./pages/TensesPage";
@@ -47,7 +47,7 @@ export default function App() {
           <Route path="/spelling" element={<SpellingPage />} />
           <Route path="/grammar" element={<GrammarPage />} />
           <Route path="/grammar/tenses" element={<TensesPage />} />
-          <Route path="/grammar/verb-forms" element={<VerbFormsPage />} />
+          <Route path="/grammar/topic/:id" element={<GrammarTopicPage />} />
           <Route path="/grammar/builder" element={<SentenceBuilderPage />} />
           <Route path="/grammar/irregulars" element={<IrregularsPage />} />
           <Route path="/grammar/exceptions" element={<IrregularsPage />} />
