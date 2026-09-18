@@ -6,8 +6,8 @@ export const baseCategories: Category[] = [
   { id: "basics", name: "Основы", emoji: "📝", color: "from-blue-500 to-blue-600", description: "Базовые слова и фразы" },
   { id: "verbs", name: "Глаголы", emoji: "⚡", color: "from-yellow-500 to-yellow-600", description: "Важные действия" },
   { id: "adjectives", name: "Прилагательные", emoji: "🎨", color: "from-rose-500 to-rose-600", description: "Описание и качества" },
-  { id: "advanced", name: "Сложные слова", emoji: "🧠", color: "from-red-500 to-red-600", description: "Уровень C1–C2" },
-  { id: "listening", name: "Аудирование", emoji: "🎧", color: "from-sky-500 to-indigo-600", description: "Слова из аудирований и текстов" },
+  { id: "food", name: "Еда", emoji: "🍎", color: "from-emerald-500 to-emerald-600", description: "Еда и напитки" },
+  { id: "none", name: "Без категории", emoji: "🗂️", color: "from-slate-500 to-slate-600", description: "Слова без категории" },
 ];
 
 const USER_CATEGORIES_KEY = "lingua_mini_user_categories_v1";
