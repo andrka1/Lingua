@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { tenses, grammarExercises } from "../data/grammar";
 import { irregularVerbs, irregularPlurals } from "../data/irregulars";
-import { grammarTopics } from "../data/grammarTopics";
 import { getProgress } from "../data/storage";
 
 export default function GrammarPage() {
@@ -10,8 +9,7 @@ export default function GrammarPage() {
   const grammarDone = progress.grammarResults.length;
   const sentenceCount = tenses.reduce((a, t) => a + t.examples.length, 0);
 
-  // Основные разделы грамматики.
-  const coreCards = [
+  const cards = [
     {
       to: "/grammar/tenses",
       emoji: "⏳",
@@ -20,11 +18,11 @@ export default function GrammarPage() {
       color: "from-blue-500 to-indigo-600",
     },
     {
-      to: "/grammar/irregulars",
-      emoji: "🔁",
-      title: "Неправильные глаголы",
-      subtitle: `${irregularVerbs.length} глаголов · тест и впиши формы`,
-      color: "from-violet-500 to-fuchsia-600",
+      to: "/grammar/verb-forms",
+      emoji: "✍️",
+      title: "Формы глаголов",
+      subtitle: `${irregularVerbs.length} глаголов · впиши V2 и V3`,
+      color: "from-emerald-500 to-teal-600",
     },
     {
       to: "/grammar/builder",
@@ -32,6 +30,13 @@ export default function GrammarPage() {
       title: "Конструктор предложений",
       subtitle: `${sentenceCount} предложений · порядок слов`,
       color: "from-pink-500 to-rose-600",
+    },
+    {
+      to: "/grammar/irregulars",
+      emoji: "🔁",
+      title: "Неправильные глаголы",
+      subtitle: `${irregularVerbs.length} глаголов · тренировка`,
+      color: "from-violet-500 to-fuchsia-600",
     },
     {
       to: "/grammar/exceptions",
@@ -42,36 +47,6 @@ export default function GrammarPage() {
     },
   ];
 
-  // Темы с теорией + тренажёром.
-  const topicCards = grammarTopics.map((t) => ({
-    to: `/grammar/topic/${t.id}`,
-    emoji: t.emoji,
-    title: t.title,
-    subtitle: `${t.exercises.length} упражнений · правила`,
-    color: t.color,
-  }));
-
-  const renderCard = (c: {
-    to: string;
-    emoji: string;
-    title: string;
-    subtitle: string;
-    color: string;
-  }) => (
-    <button
-      key={c.to}
-      onClick={() => navigate(c.to)}
-      className={`w-full p-5 rounded-2xl bg-gradient-to-br ${c.color} text-white text-left transition-all active:scale-[0.98] shadow-soft flex items-center gap-4`}
-    >
-      <span className="text-3xl">{c.emoji}</span>
-      <div className="flex-1">
-        <h3 className="font-semibold">{c.title}</h3>
-        <p className="text-xs text-white/80 mt-0.5">{c.subtitle}</p>
-      </div>
-      <span className="text-white/70 text-xl">→</span>
-    </button>
-  );
-
   return (
     <div className="px-5 pt-8 pb-4 animate-fade-in">
       <h1 className="text-2xl font-display font-bold text-white mb-2">Грамматика</h1>
@@ -79,12 +54,22 @@ export default function GrammarPage() {
         Правила, формы глаголов и построение предложений
       </p>
 
-      <div className="flex flex-col gap-3">{coreCards.map(renderCard)}</div>
-
-      <h2 className="text-sm font-semibold text-slate-300 mt-8 mb-3 uppercase tracking-wide">
-        Темы и правила
-      </h2>
-      <div className="flex flex-col gap-3">{topicCards.map(renderCard)}</div>
+      <div className="flex flex-col gap-3">
+        {cards.map((c) => (
+          <button
+            key={c.to}
+            onClick={() => navigate(c.to)}
+            className={`w-full p-5 rounded-2xl bg-gradient-to-br ${c.color} text-white text-left transition-all active:scale-[0.98] shadow-soft flex items-center gap-4`}
+          >
+            <span className="text-3xl">{c.emoji}</span>
+            <div className="flex-1">
+              <h3 className="font-semibold">{c.title}</h3>
+              <p className="text-xs text-white/80 mt-0.5">{c.subtitle}</p>
+            </div>
+            <span className="text-white/70 text-xl">→</span>
+          </button>
+        ))}
+      </div>
 
       <div className="mt-6 p-4 rounded-2xl bg-slate-800/60 border border-slate-700/40 flex items-center gap-3">
         <span className="text-2xl">🎯</span>

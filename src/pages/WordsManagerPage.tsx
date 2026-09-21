@@ -39,15 +39,7 @@ export default function WordsManagerPage() {
   const [catName, setCatName] = useState("");
   const [catEmoji, setCatEmoji] = useState("");
   const [catError, setCatError] = useState("");
-  const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
   const excluded = useMemo(() => new Set(getExcludedIds()), [version]);
-
-  const toggleCat = (id: string) =>
-    setCollapsedCats((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
 
   const saveCategory = (event: FormEvent) => {
     event.preventDefault();
@@ -80,17 +72,6 @@ export default function WordsManagerPage() {
       return !q || word.en.toLowerCase().includes(q) || word.ru.toLowerCase().includes(q);
     });
   }, [query, onlyMine, showRemoved, version, excluded]);
-
-  const grouped = useMemo(() => {
-    const map = new Map<string, Word[]>();
-    for (const word of filtered) {
-      const key = categories.some((c) => c.id === word.category) ? word.category : "none";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(word);
-    }
-    const order = categories.map((c) => c.id);
-    return [...map.entries()].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
-  }, [filtered]);
 
   const openCreate = () => {
     setEditingId(null);
@@ -168,55 +149,33 @@ export default function WordsManagerPage() {
         </button>
       </div>
 
-      <div className="space-y-3 mt-4">
-        {grouped.length === 0 && (
-          <p className="text-sm text-slate-500 text-center py-8">Ничего не найдено</p>
-        )}
-        {grouped.map(([catId, items]) => {
-          const cat = categories.find((c) => c.id === catId);
-          const searching = query.trim().length > 0;
-          const open = searching ? true : !collapsedCats.has(catId);
+      <div className="space-y-2 mt-4">
+        {filtered.map((word) => {
+          const mine = isUserWord(word.id);
+          const hidden = excluded.has(word.id);
           return (
-            <details key={catId} open={open} className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
-              <summary
-                onClick={(event) => { if (searching) return; event.preventDefault(); toggleCat(catId); }}
-                className="flex items-center gap-2 px-4 py-3 cursor-pointer select-none font-semibold text-white list-none [&::-webkit-details-marker]:hidden"
-              >
-                <span className="text-slate-400 text-xs transition-transform" style={{ transform: open ? "rotate(90deg)" : "none" }}>▶</span>
-                <span>{cat ? `${cat.emoji} ${cat.name}` : "🗂️ Без категории"}</span>
-                <span className="ml-auto text-slate-500 text-sm font-normal">({items.length})</span>
-              </summary>
-              <div className="space-y-2 px-3 pb-3">
-                {items.map((word) => {
-                  const mine = isUserWord(word.id);
-                  const hidden = excluded.has(word.id);
-                  return (
-                    <article key={word.id} className="rounded-2xl bg-slate-900 border border-slate-800 p-4">
-                      <div className="flex gap-3 items-start">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h2 className="font-semibold text-white break-words">{word.en}</h2>
-                            <span className="tag">{word.level}</span>
-                            {mine && <span className="tag tag-blue">моё</span>}
-                          </div>
-                          <p className="text-sm text-slate-300 mt-1">{word.ru}</p>
-                          {word.example && <p className="text-xs text-slate-500 mt-2">{word.example}</p>}
-                        </div>
-                        <button onClick={() => { toggleWordExcluded(word.id); setVersion((value) => value + 1); }} className="text-xs px-3 min-h-11 rounded-xl bg-slate-800 text-slate-300">
-                          {hidden ? "Вернуть" : "Убрать"}
-                        </button>
-                      </div>
-                      {mine && (
-                        <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800">
-                          <button onClick={() => openEdit(word)} className="flex-1 min-h-11 rounded-xl bg-slate-800 text-slate-200 text-sm">Изменить</button>
-                          <button onClick={() => remove(word)} className="flex-1 min-h-11 rounded-xl bg-red-500/10 text-red-300 text-sm">Удалить</button>
-                        </div>
-                      )}
-                    </article>
-                  );
-                })}
+            <article key={word.id} className="rounded-2xl bg-slate-900 border border-slate-800 p-4">
+              <div className="flex gap-3 items-start">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="font-semibold text-white break-words">{word.en}</h2>
+                    <span className="tag">{word.level}</span>
+                    {mine && <span className="tag tag-blue">моё</span>}
+                  </div>
+                  <p className="text-sm text-slate-300 mt-1">{word.ru}</p>
+                  {word.example && <p className="text-xs text-slate-500 mt-2">{word.example}</p>}
+                </div>
+                <button onClick={() => { toggleWordExcluded(word.id); setVersion((value) => value + 1); }} className="text-xs px-3 min-h-11 rounded-xl bg-slate-800 text-slate-300">
+                  {hidden ? "Вернуть" : "Убрать"}
+                </button>
               </div>
-            </details>
+              {mine && (
+                <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800">
+                  <button onClick={() => openEdit(word)} className="flex-1 min-h-11 rounded-xl bg-slate-800 text-slate-200 text-sm">Изменить</button>
+                  <button onClick={() => remove(word)} className="flex-1 min-h-11 rounded-xl bg-red-500/10 text-red-300 text-sm">Удалить</button>
+                </div>
+              )}
+            </article>
           );
         })}
       </div>

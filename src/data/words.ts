@@ -16,7 +16,7 @@ function normalizeWord(value: Partial<Word>, id: number): Word {
     : "A1";
   const category = categories.some((item) => item.id === value.category)
     ? value.category!
-    : "none";
+    : "basics";
   return {
     id,
     en: String(value.en || "").trim(),

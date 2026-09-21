@@ -302,6 +302,34 @@ const tenseTopics: TenseTopicInput[] = [
     },
   },
   {
+    id: "future-going-to",
+    name: "Future: going to",
+    nameRu: "Будущее: be going to",
+    formula: "am / is / are going to + V",
+    usage: "Планы, намерения и предсказания на основе очевидных признаков.",
+    markers: "tonight, this weekend, plan, intend",
+    forms: {
+      affirmative: {
+        label: "Утверждение",
+        icon: "✅",
+        formula: "am/is/are + going to + V",
+        example: { en: "I am going to start a new course.", ru: "Я собираюсь начать новый курс." },
+      },
+      negative: {
+        label: "Отрицание",
+        icon: "❌",
+        formula: "am/is/are + not + going to + V",
+        example: { en: "We aren't going to travel this summer.", ru: "Этим летом мы не собираемся путешествовать." },
+      },
+      question: {
+        label: "Вопрос",
+        icon: "❓",
+        formula: "Am/Is/Are + подлежащее + going to + V?",
+        example: { en: "Are you going to buy a car?", ru: "Ты собираешься покупать машину?" },
+      },
+    },
+  },
+  {
     id: "future-continuous",
     name: "Future Continuous",
     nameRu: "Будущее длительное",
@@ -428,6 +456,9 @@ export const grammarExercises: GrammarExercise[] = [
   // Future Simple
   { id: 19, tenseId: "future-simple", sentence: "I think it ___ snow tomorrow.", hint: "will?", options: ["will", "is going to", "going to", "shall"], answer: 0, explanation: "Прогноз с I think → will." },
   { id: 20, tenseId: "future-simple", sentence: "Don't worry, I ___ help you.", hint: "promise", options: ["am helping", "will", "helped", "help"], answer: 1, explanation: "Спонтанное обещание → will help." },
+  // Future going to
+  { id: 21, tenseId: "future-going-to", sentence: "We ___ visit grandma this weekend (plan).", hint: "plan", options: ["will", "are going to", "go", "going"], answer: 1, explanation: "Заранее запланированное действие → be going to." },
+  { id: 22, tenseId: "future-going-to", sentence: "Look at the sky! It ___ rain.", hint: "evidence", options: ["will", "is going to", "rains", "rained"], answer: 1, explanation: "Предсказание по очевидным признакам → is going to." },
   // Future Continuous
   { id: 23, tenseId: "future-continuous", sentence: "At 9 am tomorrow I ___ an exam.", hint: "take", options: ["will take", "will be taking", "take", "am taking"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
   // Future Perfect
@@ -466,6 +497,9 @@ export const grammarExercises: GrammarExercise[] = [
   // Future Simple (+2)
   { id: 47, tenseId: "future-simple", sentence: "Maybe we ___ go to the beach if it's sunny.", hint: "will?", options: ["are going to", "will", "go", "are"], answer: 1, explanation: "Неуверенность (maybe) → will." },
   { id: 48, tenseId: "future-simple", sentence: "The phone is ringing — I ___ answer it.", hint: "spontaneous", options: ["am going to", "will", "answer", "am answering"], answer: 1, explanation: "Спонтанное решение в момент речи → will." },
+  // Future going to (+2)
+  { id: 49, tenseId: "future-going-to", sentence: "I've decided: I ___ learn Italian next year.", hint: "plan", options: ["will", "am going to", "go to", "going to"], answer: 1, explanation: "Заранее принятое решение/намерение → be going to." },
+  { id: 50, tenseId: "future-going-to", sentence: "She bought paint — she ___ redecorate her room.", hint: "intention", options: ["will", "is going to", "redecorates", "is redecorating"], answer: 1, explanation: "Намерение, подтверждённое признаками → be going to." },
   // Future Continuous (+3)
   { id: 51, tenseId: "future-continuous", sentence: "Don't call at 8 — I ___ dinner then.", hint: "have", options: ["will have", "will be having", "have", "am having"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
   { id: 52, tenseId: "future-continuous", sentence: "This time next week we ___ on a beach in Italy.", hint: "relax", options: ["will be relaxing", "will relax", "relax", "are relaxing"], answer: 0, explanation: "Длительное действие в конкретный момент будущего → will be relaxing." },
@@ -489,107 +523,4 @@ export const grammarExercises: GrammarExercise[] = [
   { id: 66, tenseId: "future-continuous", kind: "identify", sentence: "This time tomorrow I will be flying to Rome.", options: ["Future Simple", "Future Continuous", "Future Perfect", "Future: going to"], answer: 1, explanation: "will be + V-ing в момент будущего → Future Continuous." },
   { id: 67, tenseId: "future-perfect-continuous", kind: "identify", sentence: "By June she will have been teaching for ten years.", options: ["Future Perfect", "Future Continuous", "Future Perfect Continuous", "Present Perfect Continuous"], answer: 2, explanation: "will have been + V-ing + by June → Future Perfect Continuous." },
   { id: 68, tenseId: "past-simple", kind: "identify", sentence: "We visited Rome last year.", options: ["Present Perfect", "Past Simple", "Past Continuous", "Past Perfect"], answer: 1, explanation: "V2 (visited) + last year → Past Simple." },
-  // ============================================================
-  // НОВЫЕ ЗАДАНИЯ (подготовка к контрольной) — больше практики по каждому времени
-  // ============================================================
-
-  // ----- Present Simple -----
-  { id: 69, tenseId: "present-simple", sentence: "My sister ___ three languages.", hint: "speak", options: ["speak", "speaks", "is speaking", "spoke"], answer: 1, explanation: "he/she/it + V-s → speaks (факт/умение)." },
-  { id: 70, tenseId: "present-simple", sentence: "We usually ___ dinner at seven.", hint: "have", options: ["have", "has", "are having", "had"], answer: 0, explanation: "we + базовая форма; usually → Present Simple." },
-  { id: 71, tenseId: "present-simple", sentence: "Tom ___ eat meat; he is a vegetarian.", hint: "отрицание", options: ["don't", "doesn't", "isn't", "didn't"], answer: 1, explanation: "he → отрицание doesn't + базовый глагол." },
-  { id: 72, tenseId: "present-simple", sentence: "___ your parents live near you?", hint: "вопрос", options: ["Do", "Does", "Are", "Did"], answer: 0, explanation: "they (parents) → вопрос с Do." },
-  { id: 73, tenseId: "present-simple", sentence: "The sun ___ in the east.", hint: "rise", options: ["rise", "rises", "is rising", "rose"], answer: 1, explanation: "Научный факт, it → rises." },
-  { id: 74, tenseId: "present-simple", sentence: "How often ___ she go to the gym?", hint: "вопрос", options: ["do", "does", "is", "did"], answer: 1, explanation: "she → вопрос с does + базовый глагол." },
-
-  // ----- Present Continuous -----
-  { id: 75, tenseId: "present-continuous", sentence: "Where are you? I ___ for the bus.", hint: "wait", options: ["wait", "am waiting", "waited", "have waited"], answer: 1, explanation: "Действие прямо сейчас → am + V-ing." },
-  { id: 76, tenseId: "present-continuous", sentence: "He ___ working today; he is on holiday.", hint: "отрицание", options: ["isn't", "doesn't", "aren't", "wasn't"], answer: 0, explanation: "he + сейчас, отрицание → isn't + V-ing." },
-  { id: 77, tenseId: "present-continuous", sentence: "Why ___ you laughing?", hint: "вопрос", options: ["do", "are", "is", "did"], answer: 1, explanation: "you + V-ing → вопрос с are." },
-  { id: 78, tenseId: "present-continuous", sentence: "The company ___ a new app this year.", hint: "develop", options: ["develops", "is developing", "developed", "develop"], answer: 1, explanation: "this year (временный период) → Present Continuous." },
-  { id: 79, tenseId: "present-continuous", sentence: "Look! The train ___.", hint: "come", options: ["comes", "is coming", "came", "come"], answer: 1, explanation: "Look! → действие сейчас → is coming." },
-  { id: 80, tenseId: "present-continuous", sentence: "___ it raining outside now?", hint: "вопрос", options: ["Is", "Does", "Are", "Did"], answer: 0, explanation: "it + now → вопрос с Is + V-ing." },
-
-  // ----- Present Perfect -----
-  { id: 81, tenseId: "present-perfect", sentence: "I have never ___ to Japan.", hint: "be", options: ["been", "was", "gone", "go"], answer: 0, explanation: "have never + V3 (been) → опыт." },
-  { id: 82, tenseId: "present-perfect", sentence: "She has just ___ the news.", hint: "hear", options: ["heard", "hear", "hearing", "hears"], answer: 0, explanation: "just → Present Perfect: has + V3 (heard)." },
-  { id: 83, tenseId: "present-perfect", sentence: "They ___ finished the project yet.", hint: "отрицание", options: ["haven't", "hasn't", "didn't", "don't"], answer: 0, explanation: "they + yet → haven't + V3." },
-  { id: 84, tenseId: "present-perfect", sentence: "We ___ each other since childhood.", hint: "know", options: ["know", "have known", "knew", "are knowing"], answer: 1, explanation: "since childhood → Present Perfect: have known." },
-  { id: 85, tenseId: "present-perfect", sentence: "___ you finished your homework?", hint: "вопрос", options: ["Have", "Has", "Did", "Do"], answer: 0, explanation: "you + V3 → вопрос с Have." },
-  { id: 86, tenseId: "present-perfect", sentence: "This is the best film I have ever ___.", hint: "see", options: ["seen", "saw", "see", "seeing"], answer: 0, explanation: "the best ... I have ever + V3 (seen) → Present Perfect." },
-
-  // ----- Present Perfect Continuous -----
-  { id: 87, tenseId: "present-perfect-continuous", sentence: "You look tired. Yes, I ___ all day.", hint: "work", options: ["worked", "have been working", "work", "am working"], answer: 1, explanation: "Результат сейчас + длительность → have been + V-ing." },
-  { id: 88, tenseId: "present-perfect-continuous", sentence: "They ___ in this town since 2018.", hint: "live", options: ["live", "have been living", "lived", "are living"], answer: 1, explanation: "since 2018 + акцент на длительность → have been living." },
-  { id: 89, tenseId: "present-perfect-continuous", sentence: "She ___ been sleeping well lately.", hint: "отрицание", options: ["hasn't", "haven't", "didn't", "isn't"], answer: 0, explanation: "she → отрицание hasn't been + V-ing." },
-  { id: 90, tenseId: "present-perfect-continuous", sentence: "How long ___ you been learning English?", hint: "вопрос", options: ["have", "has", "did", "are"], answer: 0, explanation: "How long + you → have you been + V-ing." },
-  { id: 91, tenseId: "present-perfect-continuous", sentence: "It ___ raining for hours; the streets are flooded.", hint: "rain", options: ["has been", "have been", "was", "is"], answer: 0, explanation: "it + длительность до настоящего → has been raining." },
-
-  // ----- Past Simple -----
-  { id: 92, tenseId: "past-simple", sentence: "I ___ a great film yesterday.", hint: "watch", options: ["watch", "watched", "have watched", "was watching"], answer: 1, explanation: "yesterday → Past Simple: watched." },
-  { id: 93, tenseId: "past-simple", sentence: "She ___ born in 1998.", hint: "be", options: ["was", "were", "is", "has been"], answer: 0, explanation: "was born — устойчивая форма в прошлом (she → was)." },
-  { id: 94, tenseId: "past-simple", sentence: "We ___ go out because it was raining.", hint: "отрицание", options: ["don't", "didn't", "weren't", "haven't"], answer: 1, explanation: "Отрицание в прошлом → didn't + базовый глагол." },
-  { id: 95, tenseId: "past-simple", sentence: "___ you enjoy the concert?", hint: "вопрос", options: ["Did", "Do", "Have", "Were"], answer: 0, explanation: "Вопрос о прошлом → Did + подлежащее + V." },
-  { id: 96, tenseId: "past-simple", sentence: "He ___ his leg while skiing.", hint: "break", options: ["breaks", "broke", "has broken", "was breaking"], answer: 1, explanation: "Завершённое действие → Past Simple: break → broke." },
-  { id: 97, tenseId: "past-simple", sentence: "Where ___ you go last weekend?", hint: "вопрос", options: ["do", "did", "have", "were"], answer: 1, explanation: "last weekend → вопрос с did." },
-
-  // ----- Past Continuous -----
-  { id: 98, tenseId: "past-continuous", sentence: "At 6 pm yesterday I ___ home.", hint: "drive", options: ["drove", "was driving", "drive", "have driven"], answer: 1, explanation: "Конкретный момент прошлого → was + V-ing." },
-  { id: 99, tenseId: "past-continuous", sentence: "They ___ TV when the lights went out.", hint: "watch", options: ["watched", "were watching", "watch", "had watched"], answer: 1, explanation: "Фоновое действие, прерванное другим → were watching." },
-  { id: 100, tenseId: "past-continuous", sentence: "I ___ sleeping when you called.", hint: "отрицание", options: ["wasn't", "weren't", "didn't", "hadn't"], answer: 0, explanation: "I → отрицание wasn't + V-ing." },
-  { id: 101, tenseId: "past-continuous", sentence: "What ___ they doing at midnight?", hint: "вопрос", options: ["was", "were", "did", "are"], answer: 1, explanation: "they + V-ing → вопрос с were." },
-  { id: 102, tenseId: "past-continuous", sentence: "While she ___, someone knocked at the door.", hint: "cook", options: ["cooked", "was cooking", "cooks", "had cooked"], answer: 1, explanation: "While + длительный фон → Past Continuous." },
-
-  // ----- Past Perfect -----
-  { id: 103, tenseId: "past-perfect", sentence: "When we arrived, the concert had already ___.", hint: "begin", options: ["begun", "began", "begin", "beginning"], answer: 0, explanation: "had already + V3 (begun) — раньше другого прошлого." },
-  { id: 104, tenseId: "past-perfect", sentence: "He couldn't get in because he ___ his keys.", hint: "lose", options: ["lost", "had lost", "loses", "was losing"], answer: 1, explanation: "Причина в более раннем прошлом → had + V3." },
-  { id: 105, tenseId: "past-perfect", sentence: "She ___ seen snow before she moved to Canada.", hint: "отрицание", options: ["hadn't", "hasn't", "didn't", "wasn't"], answer: 0, explanation: "Отрицание в Past Perfect → hadn't + V3." },
-  { id: 106, tenseId: "past-perfect", sentence: "By the time the film started, we ___ our seats.", hint: "find", options: ["found", "had found", "find", "were finding"], answer: 1, explanation: "By the time + раньше другого прошлого → had found." },
-  { id: 107, tenseId: "past-perfect", sentence: "___ they met before the wedding?", hint: "вопрос", options: ["Had", "Have", "Did", "Were"], answer: 0, explanation: "Вопрос в Past Perfect → Had + подлежащее + V3." },
-
-  // ----- Past Perfect Continuous -----
-  { id: 108, tenseId: "past-perfect-continuous", sentence: "My eyes hurt because I ___ at the screen for hours.", hint: "look", options: ["looked", "had been looking", "was looking", "have been looking"], answer: 1, explanation: "Длительность до момента в прошлом → had been + V-ing." },
-  { id: 109, tenseId: "past-perfect-continuous", sentence: "She was out of breath; she ___.", hint: "run", options: ["ran", "had been running", "was running", "has been running"], answer: 1, explanation: "Результат в прошлом от длительного действия → had been running." },
-  { id: 110, tenseId: "past-perfect-continuous", sentence: "He ___ been feeling well before he collapsed.", hint: "отрицание", options: ["hadn't", "hasn't", "wasn't", "didn't"], answer: 0, explanation: "Отрицание → hadn't been + V-ing." },
-  { id: 111, tenseId: "past-perfect-continuous", sentence: "How long ___ you been waiting before the taxi came?", hint: "вопрос", options: ["had", "have", "did", "were"], answer: 0, explanation: "How long + до другого прошлого → had you been + V-ing." },
-
-  // ----- Future Simple (will) -----
-  { id: 112, tenseId: "future-simple", sentence: "Don't worry, everything ___ be fine.", hint: "will", options: ["will", "is going to", "shall", "is"], answer: 0, explanation: "Прогноз/успокоение → will + V." },
-  { id: 113, tenseId: "future-simple", sentence: "I ___ tell anyone your secret.", hint: "отрицание", options: ["won't", "don't", "am not", "didn't"], answer: 0, explanation: "Обещание в отрицании → won't + V." },
-  { id: 114, tenseId: "future-simple", sentence: "___ you help me with this box?", hint: "вопрос", options: ["Will", "Do", "Are", "Did"], answer: 0, explanation: "Просьба/вопрос о будущем → Will + подлежащее + V." },
-  { id: 115, tenseId: "future-simple", sentence: "I think our team ___ win the match.", hint: "will?", options: ["will", "is going to", "wins", "won"], answer: 0, explanation: "Мнение/прогноз с I think → will." },
-  { id: 116, tenseId: "future-simple", sentence: "The meeting ___ probably start late.", hint: "will", options: ["will", "is", "does", "would"], answer: 0, explanation: "probably → прогноз с will." },
-
-
-  // ----- Future Continuous -----
-  { id: 121, tenseId: "future-continuous", sentence: "This time next week I ___ on a plane to Tokyo.", hint: "sit", options: ["will sit", "will be sitting", "sit", "am sitting"], answer: 1, explanation: "Действие в процессе в момент будущего → will be + V-ing." },
-  { id: 122, tenseId: "future-continuous", sentence: "At this time tomorrow we ___ dinner.", hint: "have", options: ["will have", "will be having", "have", "are having"], answer: 1, explanation: "Конкретный момент будущего → will be having." },
-  { id: 123, tenseId: "future-continuous", sentence: "I ___ be working tomorrow, so we can meet.", hint: "отрицание", options: ["won't", "am not", "don't", "wasn't"], answer: 0, explanation: "Отрицание → won't be + V-ing." },
-  { id: 124, tenseId: "future-continuous", sentence: "___ you be using your laptop tonight?", hint: "вопрос", options: ["Will", "Are", "Do", "Shall"], answer: 0, explanation: "Вопрос → Will + подлежащее + be + V-ing." },
-
-  // ----- Future Perfect -----
-  { id: 125, tenseId: "future-perfect", sentence: "By 2030 scientists ___ a cure, I hope.", hint: "find", options: ["will find", "will have found", "find", "are finding"], answer: 1, explanation: "By 2030 → завершится к моменту → will have + V3." },
-  { id: 126, tenseId: "future-perfect", sentence: "I ___ this book by Friday.", hint: "read", options: ["will read", "will have read", "read", "am reading"], answer: 1, explanation: "by Friday → Future Perfect: will have read." },
-  { id: 127, tenseId: "future-perfect", sentence: "She ___ have finished by then.", hint: "отрицание", options: ["won't", "doesn't", "isn't", "didn't"], answer: 0, explanation: "Отрицание → won't have + V3." },
-  { id: 128, tenseId: "future-perfect", sentence: "___ they have built the bridge by next summer?", hint: "вопрос", options: ["Will", "Are", "Do", "Have"], answer: 0, explanation: "Вопрос → Will + подлежащее + have + V3." },
-
-  // ----- Future Perfect Continuous -----
-  { id: 129, tenseId: "future-perfect-continuous", sentence: "By December I ___ here for two years.", hint: "work", options: ["will work", "will have been working", "will be working", "have worked"], answer: 1, explanation: "Длительность к моменту в будущем → will have been + V-ing." },
-  { id: 130, tenseId: "future-perfect-continuous", sentence: "By the end of the trip we ___ for 12 hours.", hint: "drive", options: ["will drive", "will have been driving", "will be driving", "drove"], answer: 1, explanation: "Акцент на длительности до будущего → will have been driving." },
-  { id: 131, tenseId: "future-perfect-continuous", sentence: "How long ___ you have been studying by graduation?", hint: "вопрос", options: ["will", "are", "do", "have"], answer: 0, explanation: "Вопрос → Will + подлежащее + have been + V-ing." },
-  { id: 132, tenseId: "future-perfect-continuous", sentence: "Next month she ___ Spanish for a year.", hint: "learn", options: ["will learn", "will have been learning", "will be learning", "learns"], answer: 1, explanation: "Длительность к будущему моменту → will have been learning." },
-
-  // ===== Задания «определи время» (kind: identify) =====
-  { id: 133, tenseId: "present-continuous", kind: "identify", sentence: "She is cooking dinner right now.", options: ["Present Simple", "Present Continuous", "Present Perfect", "Past Continuous"], answer: 1, explanation: "am/is/are + V-ing + right now → Present Continuous." },
-  { id: 134, tenseId: "past-simple", kind: "identify", sentence: "They played football yesterday.", options: ["Past Simple", "Past Continuous", "Present Perfect", "Past Perfect"], answer: 0, explanation: "V2 (played) + yesterday → Past Simple." },
-  { id: 135, tenseId: "present-perfect-continuous", kind: "identify", sentence: "He has been working since morning.", options: ["Present Perfect", "Present Perfect Continuous", "Past Perfect Continuous", "Present Continuous"], answer: 1, explanation: "has been + V-ing + since → Present Perfect Continuous." },
-  { id: 136, tenseId: "future-simple", kind: "identify", sentence: "I will call you later.", options: ["Future Continuous", "Future Simple", "Future: going to", "Future Perfect"], answer: 1, explanation: "will + V → Future Simple." },
-  { id: 138, tenseId: "past-perfect-continuous", kind: "identify", sentence: "She had been studying for hours before the exam.", options: ["Past Perfect", "Past Perfect Continuous", "Present Perfect Continuous", "Past Continuous"], answer: 1, explanation: "had been + V-ing + before → Past Perfect Continuous." },
-  { id: 139, tenseId: "present-simple", kind: "identify", sentence: "He plays the guitar every evening.", options: ["Present Continuous", "Present Simple", "Present Perfect", "Past Simple"], answer: 1, explanation: "V-s + every evening → Present Simple." },
-  { id: 140, tenseId: "past-continuous", kind: "identify", sentence: "I was reading when she arrived.", options: ["Past Simple", "Past Continuous", "Past Perfect", "Present Continuous"], answer: 1, explanation: "was + V-ing (фон) → Past Continuous." },
-  { id: 141, tenseId: "present-perfect", kind: "identify", sentence: "We have lived here for ten years.", options: ["Past Simple", "Present Perfect", "Present Perfect Continuous", "Past Perfect"], answer: 1, explanation: "have + V3 + for → Present Perfect." },
-  { id: 142, tenseId: "future-continuous", kind: "identify", sentence: "At 8 pm I will be watching a film.", options: ["Future Simple", "Future Continuous", "Future Perfect", "Present Continuous"], answer: 1, explanation: "will be + V-ing в момент будущего → Future Continuous." },
-  { id: 143, tenseId: "future-perfect", kind: "identify", sentence: "They will have left by the time you come.", options: ["Future Simple", "Future Continuous", "Future Perfect", "Future Perfect Continuous"], answer: 2, explanation: "will have + V3 + by the time → Future Perfect." },
-  { id: 144, tenseId: "past-perfect", kind: "identify", sentence: "The train had already left when we got there.", options: ["Past Simple", "Past Perfect", "Present Perfect", "Past Continuous"], answer: 1, explanation: "had + V3 (left), раньше другого прошлого → Past Perfect." },
-  { id: 145, tenseId: "future-perfect-continuous", kind: "identify", sentence: "By May they will have been dating for a year.", options: ["Future Perfect", "Future Perfect Continuous", "Future Continuous", "Present Perfect Continuous"], answer: 1, explanation: "will have been + V-ing + by May → Future Perfect Continuous." },
-
 ];
