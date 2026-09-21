@@ -1,0 +1,66 @@
+name: Deploy Lingua to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Разрешаем workflow публиковать на GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Только одна публикация одновременно; запущенную не отменяем
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build web app
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      # SPA-fallback: чтобы прямые ссылки (react-router) не давали 404
+      - name: Add SPA fallback (404.html)
+        run: cp dist/index.html dist/404.html
+
+      # Отключаем Jekyll, чтобы файлы с _ не игнорировались
+      - name: Add .nojekyll
+        run: touch dist/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
