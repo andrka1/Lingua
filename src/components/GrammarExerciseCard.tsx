@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { GrammarExercise } from "../data/grammar";
-import { speak } from "../data/storage";
 
 interface Props {
   exercise: GrammarExercise;
@@ -18,9 +17,12 @@ export default function GrammarExerciseCard({
   const [selected, setSelected] = useState<number | null>(null);
   const answered = selected !== null;
   const isIdentify = exercise.kind === "identify";
-  const [before, after] = isIdentify
-    ? [exercise.sentence, ""]
-    : exercise.sentence.split("___");
+  // Разбиваем по пропускам. Если в предложении несколько "___",
+  // чип с ответом ставим на место первого, а весь оставшийся текст
+  // сохраняем (раньше хвост после второго пропуска терялся).
+  const segments = isIdentify ? [exercise.sentence] : exercise.sentence.split("___");
+  const before = segments[0];
+  const after = segments.slice(1).join("");
 
   // Перемешиваем варианты ответа, чтобы правильный не стоял всегда на одном месте.
   // Пересчитывается при смене задания.
@@ -45,13 +47,6 @@ export default function GrammarExerciseCard({
     const correct = selected === correctIndex;
     setSelected(null);
     onAnswer(correct);
-  };
-
-  const handleSpeak = () => {
-    const fullSentence = isIdentify
-      ? exercise.sentence
-      : exercise.sentence.replace("___", opts[correctIndex]);
-    speak(fullSentence, "en-US");
   };
 
   const optionStyle = (i: number) => {
@@ -106,19 +101,6 @@ export default function GrammarExerciseCard({
           <p className="text-sm text-amber-300/80 mt-2">💡 {exercise.hint}</p>
         )}
       </div>
-
-      {/* Audio button */}
-      <button
-        onClick={handleSpeak}
-        className="w-full mb-4 py-3 rounded-xl bg-slate-800 border border-slate-700/50 text-slate-300 font-medium transition-all active:scale-95 flex items-center justify-center gap-2 hover:bg-slate-700"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-        </svg>
-        Прослушать предложение
-      </button>
 
       {/* Options */}
       <div className="space-y-2 mb-4">
